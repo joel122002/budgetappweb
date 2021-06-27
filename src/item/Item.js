@@ -1,5 +1,4 @@
 import Parse from "parse";
-import {Redirect} from "react-router-dom";
 import React, {useRef} from "react";
 import './Item.css'
 import StyledInput from "../styledInput/StyledInput";

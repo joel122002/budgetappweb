@@ -19,7 +19,6 @@ function StyledInput(prop, ref) {
         }
         prop.onValChange(ob)
         setText(event.target.value)
-        // console.log(text)
     }
     return (
         <div className="input-wrapper price">

@@ -10,36 +10,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as moment from "moment";
 
 function Items() {
-    // class Item {
-    //     constructor(height, width) {
-    //         this.height = height;
-    //         this.width = width;
-    //     }
-    // }
-    // async function a() {
-    //     var Item = Parse.Object.extend("Items")
-    //     var query = new Parse.Query(Item);
-    //     query.equalTo("username", "Varghese Joseph");
-    //     const results = await query.find();
-    //     results.forEach(logItems)
-    //     for (let i = 0; i < results.length; i++) {
-    //         const object = results[i];
-    //         console.log(object.id);
-    //     }
-    //     console.log("done")
-    // }
-    //
-    // a()
-
-    // query.first().then(function (pet) {
-    //     if (pet) {
-    //         console.log('Item found with Item: ' + pet.get("ItemName") + ' and Price: ' + pet.get("Price"));
-    //     } else {
-    //         console.log("Nothing found, please try again");
-    //     }
-    // }).catch(function (error) {
-    //     console.log("Error: " + error.code + " " + error.message);
-    // });
     function dateAsString(date) {
         console.log("DateAsString is called")
         const day = date.getDate()
