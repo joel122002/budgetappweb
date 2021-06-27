@@ -1,0 +1,26 @@
+::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+input[type=date], input[type=date]:focus {
+    color: white;
+    border: none;
+    background-color: black;
+
+    outline: none;
+}
+
+.date-picker-items {
+    display: flex;
+    align-items: center;
+    padding: 6px 10vw;
+}
+
+.date-header{
+    display: inline;
+    margin-bottom: 2px;
+    margin-left: 40px;
+}
+
+.calendar-icon-wrapper {
+    display: inline-block;
+}

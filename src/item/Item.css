@@ -1,0 +1,25 @@
+.give-margin{
+    margin-left: 20px;
+}
+.styled-input-wrapper-items {
+    display: inline-block;
+}
+
+.styled-input-wrapper-items.item {
+    width: 50%;
+}
+
+.styled-input-wrapper-items.price {
+    width: 15%;
+    margin-left: 20px;
+}
+
+.check-wrapper-item {
+    display: block;
+    margin-left: auto;
+    height: 30px;
+}
+.item-wrapper-item {
+    padding: 6px 10vw;
+    text-align: center;
+}

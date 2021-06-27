@@ -1,0 +1,35 @@
+.styled-input-wrapper {
+    width: 100%;
+    display: block;
+}
+
+.form-wrapper {
+    width: 25vw;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.styled-input-wrapper.below{
+    margin-top: 20px;
+}
+
+.button {
+    display: inline;
+    border: none;
+    padding: 10px 40px;
+    background-color: #80868B;
+    color: black;
+    text-transform: uppercase;
+    outline: none;
+}
+
+.button:focus {
+    outline: none;
+}
+
+.button.login {
+    margin-top: 40px;
+}
