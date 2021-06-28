@@ -1,18 +1,35 @@
 import Parse from "parse";
-import React, {useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import './Item.css'
 import StyledInput from "../styledInput/StyledInput";
 
+/*
+prop:
+
+objectId
+date
+itemname
+price
+ */
+
 function Item(prop) {
-    var itemname, price;
+    // var itemname, price;
+    const [itemname, setItemname] = useState("");
+    const [price, setPrice] = useState("");
     const childRef1 = useRef();
     const childRef = useRef();
-
+    useEffect(() => {
+        // Should not ever set state during rendering, so do this in useEffect instead.
+        setItemname(prop.itemname);
+        setPrice(prop.price)
+    }, []);
     function onChanged(object) {
         if (object.type == "itemname") {
-            itemname = object.value;
+            setItemname(object.value)
+            // itemname = object.value;
         } else if (object.type == "price") {
-            price = object.value;
+            setPrice(object.value)
+            // price = object.value;
         }
     }
 
@@ -37,6 +54,8 @@ function Item(prop) {
                 .then((item) => {
                     // Execute any logic that should take place after the object is saved.
                     alert('New object created with objectId: ' + item.id);
+                    setItemname("")
+                    setPrice("")
                     prop.onAdd();
                 }, (error) => {
                     // Execute any logic that should take place if the save fails.
@@ -57,10 +76,10 @@ function Item(prop) {
             }}>
                 <div className="styled-input-wrapper-items item">
                     <StyledInput ref={childRef1} className="give-margin" type="text" placeholder="Item" name="itemname"
-                                 onValChange={onChanged} value={prop.itemname}/>
+                                 onValChange={onChanged} value={itemname} showDelete={prop.itemname ? true : false}/>
                 </div>
                 <div className="styled-input-wrapper-items price">
-                    <StyledInput ref={childRef} type="number" placeholder="Price" name="price" onValChange={onChanged} value={prop.price}/>
+                    <StyledInput ref={childRef} type="number" placeholder="Price" name="price" onValChange={onChanged} value={price}/>
                 </div>
                 <div style={
                     {

@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Parse from "parse";
 import Item from "../item/Item";
 import {Redirect} from "react-router-dom";
@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import * as moment from "moment";
 
 function Items() {
+    // Method to convert a given date to a string
     function dateAsString(date) {
         console.log("DateAsString is called")
         const day = date.getDate()
@@ -19,6 +20,7 @@ function Items() {
         return day + " " + month + " " + year + " (" + dayOfWeek + ")"
     }
 
+    // Method to convert a day to a string
     function dayToString(day) {
         console.log("dayToString is called")
         switch (day) {
@@ -39,6 +41,7 @@ function Items() {
         }
     }
 
+    // Method to convert a month into a string
     function monthToString(day) {
         console.log("MonthToString is called")
         switch (day) {
@@ -69,6 +72,7 @@ function Items() {
         }
     }
 
+    // Method to get today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to  29/06/2021 00:00:00 UTC
     function dateInUTC(date) {
         console.log("DateInUTC is called")
         date = date.toDate()
@@ -78,32 +82,39 @@ function Items() {
         return new Date(Date.UTC(yyyy, parseInt(mm), parseInt(dd), 0, 0, 0));
     }
 
+    // Creating today's date in UTC so that it can be set as the initial state of date and dateText
     var today = new Date();
     today = moment(today);
     today = dateInUTC(today);
 
+    // State to check if the DatePicker Dialog is open. By default it is false
     const [open, setOpen] = useState(false);
+    // State that holds the date of the items by default it is today's date in 00:00:00 UTC
     const [date, setDate] = useState(today);
+    // State that holds the string format of the date
     const [dateText, setDateText] = useState(dateAsString(today));
+    // State that hold the items for the date state
     const [items, setItems] = useState([])
+    // Checks if it is the first session so that it can render the default date's items
     const [firstRun, setFirstRun] = useState(true);
+    // Checking if the user has not logged in
     if (!Parse.User.current()) {
+        // If the user is not logged in we redirect him to the login screen
         return <Redirect to="/" />
     }
-
+    // Stores the user which we will use to extract the username
     var user = Parse.User.current();
+    // Extracting username form the variable "user"
     var name= user.get("username");
 
+    // Checking if it is the firstRun. If it is we set "firstRun" to false and get and display all the items for the default date
     if (firstRun) {
         console.log("First run is called")
         setFirstRun(false);
         getItemsForDate(today)
     }
 
-    function logItems(obj) {
-        console.log(obj)
-    }
-
+    // Function that fetches data from the server and sets the received items as the state "items"
     async function getItemsForDate(date) {
         console.log("GetItems for date is called")
         var Item = Parse.Object.extend("Items")
@@ -113,43 +124,49 @@ function Items() {
         query.equalTo("Date", date)
         query.descending("createdAt")
         const results = await query.find();
+        setItems([])
         setItems(results);
-        // console.log(items)
-        // results.forEach(logItems)
     }
 
+    // Function that opens the DatePicker Dialog when the calendar icon is clicked
     const handleClickOpen = () => {
         setOpen(true)
     };
 
-    const handleClose = (value) => {
+    // Function that is called when the DatePickerDialog is closed
+    const handleClose = (date) => {
+        console.log(date)
+        // Sets its open state to false
         setOpen(false);
-        var c = dateInUTC(value);
-        console.log(c)
-        getItemsForDate(c)
-        setDate(c)
-        c = dateAsString(c)
-        setDateText(c)
-        // console.log(date)
+        // Constant that holds the UTC 00:00:00 date of the date chosen by the user
+        const UTCDate = dateInUTC(date);
+        // Getting items for the date chosen by the user
+        getItemsForDate(UTCDate)
+        // Setting the "date" state to the date chosen by the user
+        setDate(UTCDate)
+        // Constant that holds the date selected by the user as a string
+        const UTCDateString = dateAsString(UTCDate);
+        // Setting the "dateText" state as the string of the date chosen by the user
+        setDateText(UTCDateString)
     };
 
+    // Function that receives a ParseObject and presents the data as an "Item"
     function showItem(item) {
-        return <Item objectId={item.get("objectId")} itemname={item.get("ItemName")} price={item.get("Price")}/>
+        return <Item objectId={item.get("objectId")} itemname={item.get("ItemName")} price={item.get("Price")} date={item.get("date")}/>
     }
 
-    function onDateChange(event) {
-        console.log(event.target.value)
-
-    }
-
+    // Called when the user has successfully added a new item. Basically means refresh the page
     function onAdd() {
         getItemsForDate(date)
     }
 
     return (
         <div>
+            {/* Navbar */}
             <Navbar />
+            {/* Here is where the user enters a new item we give it a date of the "date" state so that the object entered has a date of the current date */}
             <Item date={date} onAdd={onAdd}/>
+            { /* div that holds the date and calendar icon to open the DatePickerDialog */ }
             <div className="date-picker-items">
                 <div style={{display: "inline-block",
                 height: "100%"}}>
@@ -165,7 +182,7 @@ function Items() {
                 </div>
                 <h1 className="date-header">{dateText}</h1>
             </div>
-            <DatePickerDialog selectedValue={date} open={open} date={date} onClose={handleClose} />
+            <DatePickerDialog selectedValue={date} open={open} date={moment(date)} onClose={handleClose} />
             {items.map(showItem)}
         </div>
     )
