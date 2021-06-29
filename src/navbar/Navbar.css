@@ -1,4 +1,14 @@
 .bg-dark {
     background-color: #444444!important;
     margin-bottom: 10px;
+    color: white;
+}
+
+svg.navbar-text.nav-link {
+    color: rgba(255,255,255,.5);
+    transition: 0.5s;
+}
+
+svg.navbar-text.nav-link:hover {
+    color: white;
 }

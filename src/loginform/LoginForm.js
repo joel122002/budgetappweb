@@ -1,25 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import {Redirect, useHistory} from "react-router-dom";
-import StyledInput from "../styledInput/StyledInput";
 import './LoginForm.css'
 import Parse from "parse";
 
 function LoginForm(prop) {
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
     const history = useHistory();
     if (Parse.User.current()) {
         return <Redirect to="/items" />
     } else {
-        var username;
-        var password;
-
-        function onChanged(object) {
-            if (object.type == "password") {
-                password = object.value
-            }
-            if (object.type == "username") {
-                username = object.value
-            }
-        }
 
         var buttonClick = async (event) => {
             event.preventDefault();
@@ -30,16 +20,35 @@ function LoginForm(prop) {
             } catch (e){
                 alert(e.message);
             }
+        }
 
+        function onUsernameChange(event) {
+            const enteredValue = event.target.value;
+            setUsername(enteredValue);
+        }
+
+        function onPasswordChange(event) {
+            const enteredValue = event.target.value;
+            setPassword(enteredValue);
         }
 
         return (
             <div className="form-wrapper">
                 <div className="styled-input-wrapper">
-                    <StyledInput type="text" placeholder="Username" name="username" onValChange={onChanged} widthInVW="25"/>
+                    <div className="input-wrapper">
+                        <div className="form__div">
+                            <input onChange={onUsernameChange} type="text" className="form__input" placeholder=" " />
+                            <label htmlFor="" className="form__label">Username</label>
+                        </div>
+                    </div>
                 </div>
                 <div className="styled-input-wrapper below">
-                    <StyledInput type="password" placeholder="Password" name="password" onValChange={onChanged} widthInVW="25"/>
+                    <div className="input-wrapper">
+                        <div className="form__div">
+                            <input onChange={onPasswordChange} type="password" className="form__input" placeholder=" " />
+                            <label htmlFor="" className="form__label">Password</label>
+                        </div>
+                    </div>
                 </div>
                 <button onClick={buttonClick} className="button login">Submit</button>
             </div>

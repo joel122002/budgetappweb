@@ -17,6 +17,7 @@ function App() {
                 <Switch>
                     <Route path="/items" component={Items}/>
                     <Route path="/" component={LoginForm}/>
+                    <Route path="/calc" component={LoginForm}/>
                 </Switch>
             </BrowserRouter>
         </MuiPickersUtilsProvider>

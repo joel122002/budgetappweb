@@ -152,7 +152,7 @@ function Items() {
 
     // Function that receives a ParseObject and presents the data as an "Item"
     function showItem(item) {
-        return <Item objectId={item.get("objectId")} itemname={item.get("ItemName")} price={item.get("Price")} date={item.get("date")}/>
+        return <Item objectId={item.id} itemname={item.get("ItemName")} price={item.get("Price")} date={item.get("Date")} itemObject={item} onAdd={() => {getItemsForDate(date)}}/>
     }
 
     // Called when the user has successfully added a new item. Basically means refresh the page

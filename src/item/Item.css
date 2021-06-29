@@ -1,3 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+:root {
+    /*===== Colores =====*/
+    --first-color: #FFF;
+    --input-color: #80868B  ;
+    --border-color: #80868B;
+
+    /*===== Fuente y tipografia =====*/
+    --body-font: 'Roboto', sans-serif;
+    --normal-font-size: 1rem;
+    --small-font-size: .75rem;
+}
+
+/*===== BASE =====*/
+*, ::before, ::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--body-font);
+    font-size: var(--normal-font-size);
+}
+
+/*===== FORM =====*/
+.form__div {
+    position: relative;
+    height: 48px;
+    /*margin-bottom: 1.5rem;*/
+}
+
+.form__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #FFFFFF;
+    width: 100%;
+    height: 100%;
+    font-size: var(--normal-font-size);
+    border: 1px solid var(--border-color);
+    border-radius: .5rem;
+    outline: none;
+    padding: 1rem;
+    background: none;
+    z-index: 1;
+}
+
+.form__label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 .25rem;
+    background-color: #000;
+    color: var(--input-color);
+    font-size: var(--normal-font-size);
+    transition: .3s;
+}
+
+/*Input focus move up label*/
+.form__input:focus + .form__label {
+    top: -.5rem;
+    left: .8rem;
+    transform: translateY(0%);
+    color: var(--first-color);
+    font-size: var(--small-font-size);
+    font-weight: 500;
+    z-index: 10;
+}
+
+/*Input focus sticky top label*/
+.form__input:not(:placeholder-shown).form__input:not(:focus) + .form__label {
+    top: -.5rem;
+    left: .8rem;
+    transform: translateY(0%);
+    font-size: var(--small-font-size);
+    font-weight: 500;
+    z-index: 10;
+}
+
+/*Input focus*/
+.form__input:focus {
+    border: 2px solid var(--first-color);
+}
+
+.input-wrapper {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+.delete-icon {
+    display: none;
+    position: absolute;
+    height: 20px;
+    right: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    z-index: 10;
+}
+
+.delete-icon.show {
+    transition: visibility 0s, opacity 0.5s linear;
+    display: block;
+}
+
+.input-wrapper:hover + .delete-icon {
+    display: none;
+}
+
+
+
+
 .give-margin{
     margin-left: 20px;
 }
@@ -22,4 +147,11 @@
 .item-wrapper-item {
     padding: 6px 10vw;
     text-align: center;
+}
+
+.check-outer-wrapper {
+    display: inline-block;
+    top: 50%;
+    margin-left: 20px;
+    transform: translateY(-25%);
 }

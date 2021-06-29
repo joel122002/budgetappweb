@@ -1,0 +1,47 @@
+.delete-item-dialog {
+    background-color: #444444;
+}
+
+.delete-item-dialog-header{
+    margin: 10px 30px;
+    margin-top: 20px;
+    font-size: 1.7rem;
+    color: #FFFFFF;
+}
+
+.delete-item-dialog-text {
+    margin: 0 30px;
+    color: #FFFFFF;
+}
+
+.delete-item-dialog-no-button {
+    text-decoration: none;
+    color: white;
+    transition: 0.5s;
+}
+
+.delete-item-dialog-no-button:hover {
+    text-decoration: none;
+    color: darkgrey;
+}
+
+.delete-item-dialog-yes-button {
+    text-decoration: none;
+    color: white;
+    margin-left: 20px;
+    transition: 0.5s;
+}
+
+.delete-item-dialog-yes-button:hover {
+    text-decoration: none;
+    color: darkgrey;
+    margin-left: 20px;
+}
+
+.delete-item-dialog-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
