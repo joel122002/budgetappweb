@@ -2,17 +2,24 @@ import React from "react";
 import Parse from "parse";
 import './Navbar.css'
 import {useHistory} from "react-router-dom";
-function Navbar() {
+function Navbar(props) {
     const history = useHistory();
-    function logOutCurrentUserAndRedirect() {
+    function logOutCurrentUserAndRedirect(event) {
+        event.preventDefault()
         Parse.User.logOut().then(() => {
             history.push('');
         });
     }
     function onCalcClick(event) {
-        event.preventDefault();
+        event.preventDefault()
         history.push('/calc');
     }
+
+    function onItemsClick(event) {
+        event.preventDefault()
+        history.push('/items');
+    }
+
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
@@ -24,10 +31,10 @@ function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="">Items</a>
+                            <a className={"nav-link" + (props.active === "Items" ? " active" : "")} aria-current="page"  onClick={onItemsClick} href="">Items</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="">Laundry</a>
+                            <a className={"nav-link" + (props.active === "Laundry" ? " active" : "")} href="">Laundry</a>
                         </li>
                     </ul>
                     <a href="" onClick={onCalcClick}>

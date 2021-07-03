@@ -6,6 +6,7 @@ import {Switch, Route, BrowserRouter,} from "react-router-dom";
 import Parse from 'parse';
 import LoginForm from "./loginform/LoginForm";
 import Items from "./items/Items";
+import MonthlyCalculator from "./monthlycalculator/MonthlyCalculator";
 
 Parse.initialize(process.env.REACT_APP_APPLICATION_ID, process.env.REACT_APP_JAVASCRIP_KEY);
 Parse.serverURL = process.env.REACT_APP_SERVER_URL;
@@ -15,9 +16,9 @@ function App() {
         <MuiPickersUtilsProvider utils={MomentUtils}>
             <BrowserRouter>
                 <Switch>
+                    <Route path="/calc" component={MonthlyCalculator}/>
                     <Route path="/items" component={Items}/>
                     <Route path="/" component={LoginForm}/>
-                    <Route path="/calc" component={LoginForm}/>
                 </Switch>
             </BrowserRouter>
         </MuiPickersUtilsProvider>

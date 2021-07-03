@@ -163,7 +163,7 @@ function Items() {
     return (
         <div>
             {/* Navbar */}
-            <Navbar />
+            <Navbar active="Items"/>
             {/* Here is where the user enters a new item we give it a date of the "date" state so that the object entered has a date of the current date */}
             <Item date={date} onAdd={onAdd}/>
             { /* div that holds the date and calendar icon to open the DatePickerDialog */ }

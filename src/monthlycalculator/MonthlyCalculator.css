@@ -1,0 +1,35 @@
+.calc-month-text{
+    margin-left: 200px;
+}
+
+.calc-expense-text {
+    margin-left: 200px;
+}
+
+.calc-control-button {
+    background-color: #444444;
+    height: 50px;
+    width: 25vw;
+    outline: none;
+    border: none;
+}
+
+.calc-control-button.left {
+    float: left;
+}
+
+.calc-control-button.right {
+    float: right;
+}
+
+.calc-control-button.center {
+    display: inline-block;
+}
+
+.calc-button-wrapper {
+    width: 100%;
+    position: absolute;
+    display: block;
+    bottom: 0;
+    text-align: center;
+}
