@@ -29,8 +29,6 @@ function Item(prop) {
     function saveOrUpdateItem(event) {
         event.preventDefault();
         if (!prop.objectId) {
-            console.log(prop.objectId);
-            console.log(prop.date)
             var today = prop.date;
             var dd = String(today.getDate()).padStart(2, '0');
             var mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
@@ -38,7 +36,6 @@ function Item(prop) {
             var date = new Date(Date.UTC(yyyy, mm, dd));
             const Item = Parse.Object.extend("Items");
             const item = new Item();
-            console.log(itemname + " " + price)
             item.set("ItemName", itemname);
             item.set("Price", parseInt(price));
             item.set("username", Parse.User.current().get("username"));
@@ -91,12 +88,8 @@ function Item(prop) {
             item.destroy().then((myObject) => {
                 prop.onAdd();
             }, (error) => {
-                // The delete failed.
-                // error is a Parse.Error with an error code and message.
+                console.error(error)
             })
-        }
-        else {
-            console.log("No")
         }
     }
 
@@ -110,12 +103,11 @@ function Item(prop) {
                         <div className="form__div" onMouseEnter={() => setDeleteItemClass("delete-icon show")} onMouseLeave={() => setDeleteItemClass("delete-icon")}>
                             {prop.objectId ? <a href="" onClick={(event) => {
                                 event.preventDefault();
-                                console.log("Hello")
                                 setDeleteDialogOpen(true)
                             }}>
                                 <svg className={deleteIconClass} xmlns="http://www.w3.org/2000/svg"
                                      viewBox="0 0 64 58.67">
-                                    <title>Asset 25</title>
+                                    <title>Delete Item</title>
                                     <g id="Layer_2" data-name="Layer 2">
                                         <g id="Layer_1-2" data-name="Layer 1">
                                             <path fill="#FFFFFF"

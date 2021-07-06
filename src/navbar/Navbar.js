@@ -2,6 +2,7 @@ import React from "react";
 import Parse from "parse";
 import './Navbar.css'
 import {useHistory} from "react-router-dom";
+
 function Navbar(props) {
     const history = useHistory();
     function logOutCurrentUserAndRedirect(event) {
@@ -33,9 +34,9 @@ function Navbar(props) {
                         <li className="nav-item">
                             <a className={"nav-link" + (props.active === "Items" ? " active" : "")} aria-current="page"  onClick={onItemsClick} href="">Items</a>
                         </li>
-                        <li className="nav-item">
-                            <a className={"nav-link" + (props.active === "Laundry" ? " active" : "")} href="">Laundry</a>
-                        </li>
+                        {/*<li className="nav-item">*/}
+                        {/*    <a className={"nav-link" + (props.active === "Laundry" ? " active" : "")} href="">Laundry</a>*/}
+                        {/*</li>*/}
                     </ul>
                     <a href="" onClick={onCalcClick}>
                         <svg className="navbar-text nav-link" xmlns="http://www.w3.org/2000/svg"

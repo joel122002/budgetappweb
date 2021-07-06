@@ -3,7 +3,10 @@ import './DeleteItemDialog.css'
 import Dialog from '@material-ui/core/Dialog';
 
 function DeleteItemDialog(props) {
+    // prop.onClose and prop.open are assigned to onClose and open respectively. This state defines what should happen
+    // when the dialog is closed and its state (i.e. whether it is open or closed)
     const { onClose, open } = props;
+
     const [option, selectedOption] = useState(false);
 
     const handleClose = () => {

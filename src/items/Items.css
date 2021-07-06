@@ -19,6 +19,7 @@ input[type=date], input[type=date]:focus {
     display: inline;
     margin-bottom: 2px;
     margin-left: 40px;
+    color: white;
 }
 
 .calendar-icon-wrapper {

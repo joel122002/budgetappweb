@@ -7,7 +7,6 @@ import './MonthlyCalculator.css'
 
 function MonthlyCalculator() {
     function monthToString(month) {
-        console.log("MonthToString is called")
         switch (month) {
             case 0:
                 return "January";
@@ -86,7 +85,7 @@ function MonthlyCalculator() {
             var dd = String(date.getDate()).padStart(2, '0');
             var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
             var yyyy = date.getFullYear();
-            var dateAsString = mm + '/' + dd + '/' + yyyy;
+            var dateAsString = dd + '/' + mm + '/' + yyyy;
             var itemObject = {
                 date: dateAsString,
                 itemName: itemName,
@@ -119,19 +118,14 @@ function MonthlyCalculator() {
         var endDate = new Date(Date.UTC(currentYear, nextMonth, 1))
         var Item = Parse.Object.extend("Items")
         var query = new Parse.Query(Item);
-        console.log("StartDate = ", startDate)
-        console.log("EndDate = ", endDate)
         query.greaterThanOrEqualTo("Date", startDate);
         query.lessThan("Date", endDate);
         query.descending("createdAt")
         const results = await query.find();
-        console.log(results)
         filterResults(results)
     }
 
     function decrementMonth() {
-        console.log("Month is : ", currentMonth)
-        console.log("Year is : ", curryear)
         --currentMonth;
         setCurrentMonthState(currentMonth)
         if (currentMonth === -1) {
@@ -169,8 +163,6 @@ function MonthlyCalculator() {
     const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
     function generateExcelSheet() {
-        console.log(itemsForMonth)
-        console.log(itemsForMonthCurrentUser)
         childRef.current.click();
     }
 
@@ -183,14 +175,34 @@ function MonthlyCalculator() {
             <p className="calc-expense-text">{"All users : " + allUsersExpense}</p>
             <div className="calc-button-wrapper">
                 <ExcelFile element={<button className="calc-control-button center" onClick={generateExcelSheet}>Generate Excel sheet</button>} filename={String(currentMonth+1).padStart(2, '0') + "CurrentUser"}>
-                    <ExcelSheet data={itemsForMonthCurrentUser} name="Employees">
+                    <ExcelSheet data={() => {
+                        const lastRow= {
+                            date: "",
+                            itemName: "Total",
+                            price: currentUserExpense
+                        };
+                        const tempArr = [];
+                        tempArr.push(lastRow)
+                        const finalArr = itemsForMonthCurrentUser.concat(tempArr)
+                        return finalArr;
+                    }} name="Items">
                         <ExcelColumn label="Date" value="date"/>
                         <ExcelColumn label="Item Name" value="itemName"/>
                         <ExcelColumn label="Price" value="price"/>
                     </ExcelSheet>
                 </ExcelFile>
                 <ExcelFile element={<button style={{display: "none"}} ref={childRef} className="calc-control-button center" onClick={generateExcelSheet}>Generate Excel sheet</button>} filename={String(currentMonth+1).padStart(2, '0') + "AllUsers"}>
-                    <ExcelSheet data={itemsForMonth} name="Employees">
+                    <ExcelSheet data={() => {
+                        const lastRow = {
+                            date: "",
+                            itemName: "Total",
+                            price: allUsersExpense
+                        };
+                        const tempArr = []
+                        tempArr.push(lastRow)
+                        const finalArr = itemsForMonth.concat(tempArr)
+                        return finalArr;
+                    }} name="Items">
                         <ExcelColumn label="Date" value="date"/>
                         <ExcelColumn label="Item Name" value="itemName"/>
                         <ExcelColumn label="Price" value="price"/>

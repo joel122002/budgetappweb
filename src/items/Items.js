@@ -12,7 +12,6 @@ import * as moment from "moment";
 function Items() {
     // Method to convert a given date to a string
     function dateAsString(date) {
-        console.log("DateAsString is called")
         const day = date.getDate()
         const month = monthToString(date.getMonth())
         const year = date.getFullYear()
@@ -22,7 +21,6 @@ function Items() {
 
     // Method to convert a day to a string
     function dayToString(day) {
-        console.log("dayToString is called")
         switch (day) {
             case 0:
                 return "Sun";
@@ -43,7 +41,6 @@ function Items() {
 
     // Method to convert a month into a string
     function monthToString(day) {
-        console.log("MonthToString is called")
         switch (day) {
             case 0:
                 return "Jan";
@@ -74,7 +71,6 @@ function Items() {
 
     // Method to get today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to  29/06/2021 00:00:00 UTC
     function dateInUTC(date) {
-        console.log("DateInUTC is called")
         date = date.toDate()
         var dd = String(date.getDate()).padStart(2, '0');
         var mm = String(date.getMonth()).padStart(2, '0'); //January is 0!
@@ -109,18 +105,15 @@ function Items() {
 
     // Checking if it is the firstRun. If it is we set "firstRun" to false and get and display all the items for the default date
     if (firstRun) {
-        console.log("First run is called")
         setFirstRun(false);
         getItemsForDate(today)
     }
 
     // Function that fetches data from the server and sets the received items as the state "items"
     async function getItemsForDate(date) {
-        console.log("GetItems for date is called")
         var Item = Parse.Object.extend("Items")
         var query = new Parse.Query(Item);
         query.equalTo("username", name);
-        console.log(date)
         query.equalTo("Date", date)
         query.descending("createdAt")
         const results = await query.find();
@@ -135,7 +128,6 @@ function Items() {
 
     // Function that is called when the DatePickerDialog is closed
     const handleClose = (date) => {
-        console.log(date)
         // Sets its open state to false
         setOpen(false);
         // Constant that holds the UTC 00:00:00 date of the date chosen by the user
