@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import Parse from "parse";
 import Item from "../item/Item";
 import {Redirect} from "react-router-dom";
@@ -69,17 +69,18 @@ function Items() {
         }
     }
 
-    // Method to get today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to  29/06/2021 00:00:00 UTC
+    // Method to get today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to  29/06/2021
+    // 00:00:00 UTC
     function dateInUTC(date) {
         date = date.toDate()
-        var dd = String(date.getDate()).padStart(2, '0');
-        var mm = String(date.getMonth()).padStart(2, '0'); //January is 0!
-        var yyyy = date.getFullYear();
+        const dd = String(date.getDate()).padStart(2, '0');
+        const mm = String(date.getMonth()).padStart(2, '0'); //January is 0!
+        const yyyy = date.getFullYear();
         return new Date(Date.UTC(yyyy, parseInt(mm), parseInt(dd), 0, 0, 0));
     }
 
     // Creating today's date in UTC so that it can be set as the initial state of date and dateText
-    var today = new Date();
+    let today = new Date();
     today = moment(today);
     today = dateInUTC(today);
 
@@ -99,9 +100,9 @@ function Items() {
         return <Redirect to="/" />
     }
     // Stores the user which we will use to extract the username
-    var user = Parse.User.current();
+    const user = Parse.User.current();
     // Extracting username form the variable "user"
-    var name= user.get("username");
+    const name= user.get("username");
 
     // Checking if it is the firstRun. If it is we set "firstRun" to false and get and display all the items for the default date
     if (firstRun) {
@@ -111,8 +112,8 @@ function Items() {
 
     // Function that fetches data from the server and sets the received items as the state "items"
     async function getItemsForDate(date) {
-        var Item = Parse.Object.extend("Items")
-        var query = new Parse.Query(Item);
+        const Item = Parse.Object.extend("Items")
+        const query = new Parse.Query(Item);
         query.equalTo("username", name);
         query.equalTo("Date", date)
         query.descending("createdAt")
@@ -144,11 +145,18 @@ function Items() {
 
     // Function that receives a ParseObject and presents the data as an "Item"
     function showItem(item) {
-        return <Item objectId={item.id} itemname={item.get("ItemName")} price={item.get("Price")} date={item.get("Date")} itemObject={item} onAdd={() => {getItemsForDate(date)}}/>
+        return <Item
+            objectId={item.id}
+            itemname={item.get("ItemName")}
+            price={item.get("Price")}
+            date={item.get("Date")}
+            itemObject={item}
+            onDatabaseChange={onDatabaseChange}
+        />
     }
 
     // Called when the user has successfully added a new item. Basically means refresh the page
-    function onAdd() {
+    function onDatabaseChange() {
         getItemsForDate(date)
     }
 
@@ -156,8 +164,9 @@ function Items() {
         <div>
             {/* Navbar */}
             <Navbar active="Items"/>
-            {/* Here is where the user enters a new item we give it a date of the "date" state so that the object entered has a date of the current date */}
-            <Item date={date} onAdd={onAdd}/>
+            {/* Here is where the user enters a new item we give it a date of the "date" state so that the object
+                entered has a date of the current date */}
+            <Item date={date} onDatabaseChange={onDatabaseChange}/>
             { /* div that holds the date and calendar icon to open the DatePickerDialog */ }
             <div className="date-picker-items">
                 <div style={{display: "inline-block",

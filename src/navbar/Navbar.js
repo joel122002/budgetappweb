@@ -4,20 +4,33 @@ import './Navbar.css'
 import {useHistory} from "react-router-dom";
 
 function Navbar(props) {
+    // useHistory() is used to modify the url of the browser
     const history = useHistory();
+    // Function to logout user
     function logOutCurrentUserAndRedirect(event) {
-        event.preventDefault()
+        // As the Logout button is an "a" tag we don't want it to refresh (By default on clicking the "a" tag the page is
+        // refreshed). To prevent this default action we event.preventDefault()
+        event.preventDefault();
+        // Logging out the currently signed in user
         Parse.User.logOut().then(() => {
+            // If user was successfully logged out we redirect the user to the login page
             history.push('');
         });
     }
+    // Function to redirect the user to the "MonthlyCalculator" component
     function onCalcClick(event) {
-        event.preventDefault()
+        // As the Calculator button is an "a" tag we don't want it to refresh (By default on clicking the "a" tag the page is
+        // refreshed). To prevent this default action we event.preventDefault()
+        event.preventDefault();
+        // Redirect the user to the MonthlyCalculator page
         history.push('/calc');
     }
-
+    // Function to redirect the user to the "Items" component
     function onItemsClick(event) {
-        event.preventDefault()
+        // As the Items button is an "a" tag we don't want it to refresh (By default on clicking the "a" tag the page is
+        // refreshed). To prevent this default action we event.preventDefault()
+        event.preventDefault();
+        // Redirect the user to the Items page
         history.push('/items');
     }
 
@@ -27,7 +40,7 @@ function Navbar(props) {
                 <a className="navbar-brand" href="#">Budget App</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                         aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
+                    <span className="navbar-toggler-icon" />
                 </button>
                 <div className="collapse navbar-collapse" id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">

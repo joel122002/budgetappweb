@@ -1,94 +1,117 @@
 import Parse from "parse";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import './Item.css'
 import DeleteItemDialog from "../deleteitemdialog/DeleteItemDialog";
-// import StyledInput from "../styledInput/StyledInput";
-// import {object} from "prop-types";
-
-/*
-prop:
-
-objectId
-date
-itemname
-price
- */
 
 function Item(prop) {
+    // State that holds the name of the item.
     const [itemname, setItemname] = useState("");
+    // State that holds the price of the item.
     const [price, setPrice] = useState("");
+    // State that holds the classname of the delete icon. It is changed when the user hovers over the item name input
     const [deleteIconClass, setDeleteItemClass] = useState("delete-icon");
+    // State that determines whether the delete confirmation dialog is open or not
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const itemdate = prop.date
+    // If we change the state in directly it infinitely renders the page. So to prevent this we use useEffect which
+    // called after the render of the page so this doesn't result in infinite renders
     useEffect(() => {
-        // Should not ever set state during rendering, so do this in useEffect instead.
+        // setting the itemname state and price state to that sent from the items component.
         setItemname(prop.itemname);
         setPrice(prop.price)
     }, []);
 
+    // Function that saves or updates the Item. If no objectId has been sent by the "items" component it means the user
+    // has entered input in the topmost input and it means we have to add this item to the database as it doesn't exist
+    // if there is an objectId passed by the "items" component 
     function saveOrUpdateItem(event) {
+        // As the "check" is an "a" tag we don't want it to refresh (By default on clicking the "a" tag the page is
+        // refreshed). To prevent this default action we event.preventDefault()
         event.preventDefault();
+        // Getting today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to 29/06/2021
+        // 00:00:00 UTC
+        const today = prop.date;
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+        // Final date in UTC
+        const date = new Date(Date.UTC(yyyy, mm, dd));
+        // If no objectId then add the item
         if (!prop.objectId) {
-            var today = prop.date;
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
-            var yyyy = today.getFullYear();
-            var date = new Date(Date.UTC(yyyy, mm, dd));
+            // Referencing the "Items" class in back4app
             const Item = Parse.Object.extend("Items");
+            // Creating a new object of type "Item"
             const item = new Item();
+            // Setting it's attributes to that entered by the user
             item.set("ItemName", itemname);
             item.set("Price", parseInt(price));
             item.set("username", Parse.User.current().get("username"));
             item.set("Date", date);
+            // Saving this "Item" to our backend i.e. back4app
             item.save()
-                .then((item) => {
-                    // Execute any logic that should take place after the object is saved.
-                    alert('New object created with objectId: ' + item.id);
+                .then(() => {
+                    // If successful
                     setItemname("")
                     setPrice("")
-                    prop.onAdd();
+                    prop.onDatabaseChange();
                 }, (error) => {
-                    // Execute any logic that should take place if the save fails.
-                    // error is a Parse.Error with an error code and message.
+                    // If error encountered
                     alert('Failed to create new object, with error code: ' + error.message);
 
                 });
-        } else if (prop.objectId) {
-            var today = prop.date;
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth()).padStart(2, '0'); //January is 0!
-            var yyyy = today.getFullYear();
-            var date = new Date(Date.UTC(yyyy, mm, dd));
+        }
+        // If objectId exists update the "Item" with that specific objectId
+        else if (prop.objectId) {
+            // The object was passed as a prop form the "Items" component
             const item = prop.itemObject;
-
+            // Setting the updated values chosen by the user
             item.set("ItemName", itemname);
             item.set("Price", parseInt(price));
             item.set("username", Parse.User.current().get("username"));
             item.set("Date", date);
             item.save().then(() => {
-                prop.onAdd();
+                // If successful
+                prop.onDatabaseChange();
+            }, (error) => {
+                // If error encountered
+                alert('Failed to update object, with error code: ' + error.message);
             });
         }
     }
 
+    // Function that is called when the price input value is changed by the user
     function onPriceChange(event) {
+        // Getting the new value entered by the user
         const enteredValue = event.target.value;
+        // Setting the value of the "price" state to the newly updated value so that what the user enters is in sync
+        // with the value of the state
         setPrice(enteredValue);
     }
 
+    // Function that is called when the item name input value is changed by the user
     function onItemnameChange(event) {
+        // Getting the new value entered by the user
         const enteredValue = event.target.value;
+        // Setting the value of the "itemname" state to the newly updated value so that what the user enters is in sync
+        // with the value of the state
         setItemname(enteredValue);
     }
 
+    // Function called when the user dismisses the dialog (either by clicking outside or clicking one of the buttons)
     function onCloseDeleteDialog(value) {
+        // Setting the "deleteDialogOpen" state to false indicating the dialog to close itself
         setDeleteDialogOpen(false)
+        // The value returned is true if the user clicks "Yes" in all other cases it is false indicating the user
+        // doesn't want to delete the item
         if (value) {
+            // Getting the object that has been passed as a prop
             const item = prop.itemObject;
-            item.destroy().then((myObject) => {
-                prop.onAdd();
+            // Destroying (deleting) the "Item"
+            item.destroy().then(() => {
+                // If successful
+                prop.onDatabaseChange();
             }, (error) => {
-                console.error(error)
+                // If error encountered
+                console.error(error.message)
             })
         }
     }
