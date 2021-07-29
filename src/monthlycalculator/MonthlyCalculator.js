@@ -4,6 +4,9 @@ import {Redirect} from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import ReactExport from "react-export-excel";
 import './MonthlyCalculator.css'
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 function MonthlyCalculator() {
     // Function to convert month from int to a string
@@ -245,10 +248,6 @@ function MonthlyCalculator() {
         setCurrentUserExpense(0);
         getItemsForMonth();
     }
-
-    const ExcelFile = ReactExport.ExcelFile;
-    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
-    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
     function generateExcelSheet() {
         childRef.current.click();
