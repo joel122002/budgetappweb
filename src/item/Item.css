@@ -19,8 +19,8 @@ input[type=number] {
 
     /*===== Fuente y tipografia =====*/
     --body-font: 'Roboto', sans-serif;
-    --normal-font-size: 4vw;
-    --small-font-size: 3vw;
+    --normal-font-size: 1rem;
+    --small-font-size: .75rem;
 }
 
 /*===== BASE =====*/
@@ -147,12 +147,6 @@ body {
 .item-wrapper-item {
     padding: 6px 10vw;
     text-align: center;
-}
-
-@media screen and (min-width: 1096px) {
-    .item-wrapper-item {
-        padding: 0 200px;
-    }
 }
 
 .check-outer-wrapper {
