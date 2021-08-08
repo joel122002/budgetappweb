@@ -20,6 +20,19 @@ function Item(prop) {
         setPrice(prop.price)
     }, []);
 
+    // Function to show a snackbar with the desired message. It also has a toggle. If "positive" is true it'll show a
+    // green snackbar and if false it'll show a red snackbar
+    function showSnackbar(message, positive) {
+        // Get the snackbar DIV
+        var snackbar = document.getElementById("snackbar");
+        // Add the "show" class to DIV to show the snackbar
+        snackbar.className = "show";
+        snackbar.innerText = message
+        snackbar.style.backgroundColor = positive ? "#4caf50" : "#f44336"
+        // After 3 seconds, remove the show class from DIV
+        setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    }
+
     // Function that saves or updates the Item. If no objectId has been sent by the "items" component it means the user
     // has entered input in the topmost input and it means we have to add this item to the database as it doesn't exist
     // if there is an objectId passed by the "items" component 
@@ -27,6 +40,16 @@ function Item(prop) {
         // As the "check" is an "a" tag we don't want it to refresh (By default on clicking the "a" tag the page is
         // refreshed). To prevent this default action we event.preventDefault()
         event.preventDefault();
+        if (!itemname || itemname === "") {
+            // Showing a snackbar as item is empty
+            showSnackbar("Item cannot be empty", false)
+            return;
+        }
+        else if (!price) {
+            // Showing a snackbar as price is empty
+            showSnackbar("Price cannot be empty or 0", false)
+            return;
+        }
         // Getting today's date in UTC 00:00:00. For example 29/06/2021 18:54:37 IST will be converted to 29/06/2021
         // 00:00:00 UTC
         const today = prop.date;
@@ -53,10 +76,12 @@ function Item(prop) {
                     setItemname("")
                     setPrice("")
                     prop.onDatabaseChange();
+                    // Showing a snackbar to the user saying that the item was added successfully
+                    showSnackbar("Item added successfully", true)
                 }, (error) => {
                     // If error encountered
-                    alert('Failed to create new object, with error code: ' + error.message);
-
+                    // Showing a snackbar to the user saying that the item was not added
+                    showSnackbar('Failed to create new item, with error code: ' + error.message, false)
                 });
         }
         // If objectId exists update the "Item" with that specific objectId
@@ -71,9 +96,11 @@ function Item(prop) {
             item.save().then(() => {
                 // If successful
                 prop.onDatabaseChange();
+                // Showing a snackbar to the user saying that the item updated successfully
+                showSnackbar("Item updated successfully", true)
             }, (error) => {
-                // If error encountered
-                alert('Failed to update object, with error code: ' + error.message);
+                // Showing a snackbar to the user saying that the item was not updated
+                showSnackbar('Failed to update item, with error code: ' + error.message, false)
             });
         }
     }
@@ -109,9 +136,12 @@ function Item(prop) {
             item.destroy().then(() => {
                 // If successful
                 prop.onDatabaseChange();
+                // Showing a snackbar to the user saying that the deletion was successful
+                showSnackbar("Item deleted successfully")
             }, (error) => {
                 // If error encountered
-                console.error(error.message)
+                // Showing a snackbar to the user saying that the deletion was unsuccessful
+                showSnackbar('Failed to delete item, with error code: ' + error.message, false)
             })
         }
     }
@@ -167,6 +197,7 @@ function Item(prop) {
                 </div>
             </div>
             <DeleteItemDialog onClose={onCloseDeleteDialog} open={deleteDialogOpen}/>
+            <div id="snackbar" />
         </div>
     )
 }
