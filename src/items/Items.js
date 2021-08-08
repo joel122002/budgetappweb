@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState, useLayoutEffect} from "react";
 import Parse from "parse";
 import Item from "../item/Item";
 import {Redirect} from "react-router-dom";
@@ -94,17 +94,67 @@ function Items() {
     const [items, setItems] = useState([])
     // Checks if it is the first session so that it can render the default date's items
     const [firstRun, setFirstRun] = useState(true);
+
+    // Function to get element matching the XPath provided in the parameter
+    function getElementByXpath(path) {
+        return document.evaluate(
+            path,
+            document,
+            null,
+            XPathResult.FIRST_ORDERED_NODE_TYPE,
+            null
+        ).singleNodeValue;
+    }
+
+    // Sets the margin of the "date-picker-items" div according to the positioning of of the item input from the left
+    function setMargin() {
+        // Getting the item input and the datepicker div by XPath
+        let itemInput = getElementByXpath("//input[contains(@class, 'form__input')]")
+        let datePicker = getElementByXpath("//div[contains(@class, 'date-picker-items')]")
+        // Checking if they are not null. It may be null if they have not been rendered yet.
+        if (itemInput && datePicker) {
+            // Getting the coordinates of the left and right relative to the left end of the page, and the top and
+            // bottom relative to the top of the page. So in this case rect.left will be the offset of the element from
+            // the left and rect.right will be rect.left + width of the element (i.e. the offset of the right end from
+            // the left of the page). Similarly rect.top is the offset of the element from the top and rect.bottom is
+            // rect.top + height of the element
+            let rect = itemInput.getBoundingClientRect();
+            // If the left offset is more than 40 we set a fixed margin for the date-picker-items div of 40 px
+            if (rect.left > 40) {
+                datePicker.style.marginLeft = "40px";
+            }
+            // If it is equal to or less than 40 then we set the margin to the value of rect.left so that it is aligned
+            // with the bottom
+            else {
+                datePicker.style.marginLeft = rect.left + "px";
+            }
+        }
+    }
+
+    // Called when there are changes in the DOM. We use this over here to check if the viewport size has changed so
+    // that we can set the margin for the datepicker icon div
+    useLayoutEffect(() => {
+        // Calling the setMargin method to set the margin for the datepicker icon div according to the width of the
+        // viewport
+        window.addEventListener('resize', setMargin);
+        // This is called the fist time the page is refreshed. If we don't write this then it'll only call the set
+        // margin method if the viewport is changed and so it'll not set any margin for a static viewport
+        setMargin();
+    }, []);
+
     // Checking if the user has not logged in
     if (!Parse.User.current()) {
         // If the user is not logged in we redirect him to the login screen
-        return <Redirect to="/" />
+        return <Redirect to="/"/>
     }
     // Stores the user which we will use to extract the username
     const user = Parse.User.current();
     // Extracting username form the variable "user"
-    const name= user.get("username");
+    const name = user.get("username");
 
-    // Checking if it is the firstRun. If it is we set "firstRun" to false and get and display all the items for the default date
+
+    // Checking if it is the firstRun. If it is we set "firstRun" to false and get and display all the items for the
+    // default date
     if (firstRun) {
         setFirstRun(false);
         getItemsForDate(today)
@@ -155,10 +205,12 @@ function Items() {
         />
     }
 
+
     // Called when the user has successfully added a new item. Basically means refresh the page
     function onDatabaseChange() {
         getItemsForDate(date)
     }
+
 
     return (
         <div>
@@ -167,23 +219,26 @@ function Items() {
             {/* Here is where the user enters a new item we give it a date of the "date" state so that the object
                 entered has a date of the current date */}
             <Item date={date} onDatabaseChange={onDatabaseChange}/>
-            { /* div that holds the date and calendar icon to open the DatePickerDialog */ }
+            { /* div that holds the date and calendar icon to open the DatePickerDialog */}
             <div className="date-picker-items">
-                <div style={{display: "inline-block",
-                height: "100%"}}>
+                <div style={{
+                    display: "inline-block",
+                    height: "100%"
+                }}>
                 </div>
                 <div onClick={handleClickOpen} className="calendar-icon-wrapper">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
-                        viewBox="0 0 24 24" >
-                        <path fill="#FFFFFF" d="M19,3h-1L18,1h-2v2L8,3L8,1L6,1v2L5,3c-1.11,0 -1.99,0.9 -1.99,2L3,19c0,1.1 0.89,2 2,2h14c1.1,0 2,-0.9 2,-2L21,5c0,-1.1 -0.9,-2 -2,-2zM19,19L5,19L5,8h14v11zM7,10h5v5L7,15z"/>
+                        viewBox="0 0 24 24">
+                        <path fill="#FFFFFF"
+                              d="M19,3h-1L18,1h-2v2L8,3L8,1L6,1v2L5,3c-1.11,0 -1.99,0.9 -1.99,2L3,19c0,1.1 0.89,2 2,2h14c1.1,0 2,-0.9 2,-2L21,5c0,-1.1 -0.9,-2 -2,-2zM19,19L5,19L5,8h14v11zM7,10h5v5L7,15z"/>
                     </svg>
                 </div>
                 <h1 className="date-header">{dateText}</h1>
             </div>
-            <DatePickerDialog selectedValue={date} open={open} date={moment(date)} onClose={handleClose} />
+            <DatePickerDialog selectedValue={date} open={open} date={moment(date)} onClose={handleClose}/>
             {items.map(showItem)}
         </div>
     )

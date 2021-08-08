@@ -12,17 +12,35 @@ input[type=date], input[type=date]:focus {
 .date-picker-items {
     display: flex;
     align-items: center;
-    padding: 6px 10vw;
+    /*padding: 6px 10vw;*/
+    padding: 6px 0;
+    margin-left: 10vw;
+    /*margin-left: 40px;*/
 }
 
 .date-header{
     display: inline;
     margin-bottom: 2px;
     margin-left: 40px;
+    font-size: calc(2.5 * var(--normal-font-size));
     color: white;
 }
 
 .calendar-icon-wrapper {
     display: flex;
     justify-content: flex-end;
+}
+
+@media screen and (max-width: 1230px) {
+    .date-picker-items {
+        margin-left: calc((1vw / 2) * 10);
+    }
+}
+
+@media screen and (max-width: 998px) {
+    .date-picker-items {
+        padding: 6px 0;
+        /*padding-right: 40vw;*/
+        margin-left: 0;
+    }
 }

@@ -4,6 +4,7 @@ import {Redirect} from "react-router-dom";
 import Navbar from "../navbar/Navbar";
 import ReactExport from "react-export-excel";
 import './MonthlyCalculator.css'
+
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -90,7 +91,7 @@ function MonthlyCalculator() {
     // Checking if the user is logged in
     if (!Parse.User.current()) {
         // If the user is not logged in we redirect him to the login screen
-        return <Redirect to="/" />
+        return <Redirect to="/"/>
     }
 
     // Getting the currently logged in user's username
@@ -155,7 +156,7 @@ function MonthlyCalculator() {
     // Function to get the items of all the users for the current month
     async function getItemsForMonth() {
         // Setting the starting date as the fist day of this month
-        const startDate = new Date(Date.UTC(currentYear,currentMonth,1))
+        const startDate = new Date(Date.UTC(currentYear, currentMonth, 1))
         // Now we increase the month by one so if it is december we increase the year by one else we just increase the
         // month. "currentYearLocal" holds the new year and "nextMonth" holds the next month
         let currentYearLocal;
@@ -261,9 +262,11 @@ function MonthlyCalculator() {
             <p className="calc-expense-text">{currentUsername + " : " + currentUserExpense}</p>
             <p className="calc-expense-text">{"All users : " + allUsersExpense}</p>
             <div className="calc-button-wrapper">
-                <ExcelFile element={<button className="calc-control-button center" onClick={generateExcelSheet}>Generate Excel sheet</button>} filename={String(currentMonth+1).padStart(2, '0') + "CurrentUser"}>
+                <ExcelFile
+                    element={<button className="calc-control-button center" onClick={generateExcelSheet}>Generate Excel
+                        sheet</button>} filename={String(currentMonth + 1).padStart(2, '0') + "CurrentUser"}>
                     <ExcelSheet data={() => {
-                        const lastRow= {
+                        const lastRow = {
                             date: "",
                             itemName: "Total",
                             price: currentUserExpense
@@ -278,7 +281,10 @@ function MonthlyCalculator() {
                         <ExcelColumn label="Price" value="price"/>
                     </ExcelSheet>
                 </ExcelFile>
-                <ExcelFile element={<button style={{display: "none"}} ref={childRef} className="calc-control-button center" onClick={generateExcelSheet}>Generate Excel sheet</button>} filename={String(currentMonth+1).padStart(2, '0') + "AllUsers"}>
+                <ExcelFile
+                    element={<button style={{display: "none"}} ref={childRef} className="calc-control-button center"
+                                     onClick={generateExcelSheet}>Generate Excel sheet</button>}
+                    filename={String(currentMonth + 1).padStart(2, '0') + "AllUsers"}>
                     <ExcelSheet data={() => {
                         const lastRow = {
                             date: "",

@@ -1,11 +1,12 @@
 .calc-month-text{
     color: white;
-    margin-left: 200px;
+    margin-left: 14vw;
+    font-size: calc(2.5 * var(--normal-font-size));
 }
 
 .calc-expense-text {
     color: white;
-    margin-left: 200px;
+    margin-left: 14vw;
 }
 
 .calc-control-button {

@@ -17,7 +17,7 @@ function App() {
         /* Used to set the date library which the DatePicker uses. Here we are using moment as our date library */
         <MuiPickersUtilsProvider utils={MomentUtils}>
             {/* Browser router uses HTML5 history API to keep the UI in sync with the URL */}
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
                 {/* Renders the first child <Route> or <Redirect> that matches the location. For example if you have "/"
                     as the path for your first route it will be rendered irrespective of the route as "/anything" is a
                     subset of "/". Therefore it is necessary to keep "/" at the last and all the sub locations/routes on
